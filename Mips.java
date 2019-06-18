@@ -12,15 +12,17 @@ public class Mips{
     private String regUlaSaida;
 
     public Mips(){
-        memoria = new Memoria();
-        controle = new Controle();
-        bcRegistradores = new BlocoRegistradores();
-        ula = new ULA();
+        this.memoria = Memoria.getInstance();
+        this.controle = Controle.getInstance();
+        this.bcRegistradores = BlocoRegistradores.getInstance();
+        this.ula = ULA.getInstance();
+    }
 
-        regInstrucao;
-        regDadosMemoria;
-        regA;
-        regB;
-        regUlaSaida;
+    public void carregaArquivo(){
+
+    }
+
+    public void avancaClock(){
+
     }
 }

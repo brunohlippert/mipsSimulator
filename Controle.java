@@ -1,20 +1,28 @@
 public class Controle{
-    static boolean PCEscCond;
-    static boolean PCEsc;
-    static boolean louD;
-    static boolean LerMem;
-    static boolean EscMem;
-    static boolean MemParaReg;
-    static boolean IREsc;
-    static boolean FontePC;
-    static String ULAOp;
-    static boolean ULAFonteB;
-    static boolean ULAFonteA;
-    static boolean EscReg;
-    static boolean RegDst;
+    public boolean PCEscCond;
+    public boolean PCEsc;
+    public boolean louD;
+    public boolean LerMem;
+    public boolean EscMem;
+    public boolean MemParaReg;
+    public boolean IREsc;
+    public boolean FontePC;
+    public String ULAOp;
+    public boolean ULAFonteB;
+    public boolean ULAFonteA;
+    public boolean EscReg;
+    public boolean RegDst;
     
-    public Controle(){
+    private static Controle instance;
+
+    private Controle(){
         desativaTodos();
+    }
+
+    public static Controle getInstance(){
+        if(instance == null)
+            instance = new Controle();
+        return instance;
     }
 
     public void desativaTodos(){
@@ -26,7 +34,7 @@ public class Controle{
         MemParaReg = false;
         IREsc = false;
         FontePC = false;
-        ULAOp = "00";
+        ULAOp = "000";
         ULAFonteB = false;
         ULAFonteA = false;
         EscReg = false;
