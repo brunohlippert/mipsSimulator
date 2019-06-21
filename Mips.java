@@ -23,6 +23,6 @@ public class Mips{
     }
 
     public void avancaClock(){
-
+        
     }
 }
