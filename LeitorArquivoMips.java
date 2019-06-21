@@ -42,26 +42,30 @@ public class LeitorArquivoMips {
             String line;
             while (scanner.hasNextLine()) {
                 line = scanner.nextLine();
-                if (!line.equalsIgnoreCase(".text")) {
-                    System.out.println("ERRO TEXTO DEVE COMECAR COM '.text' ");
+                if(line.length() == 0){continue;}//Skip linhas em branco!
+                if (!line.equalsIgnoreCase(".data")) {
+                    System.out.println("ERRO .ASM DEVE COMECAR COM '.data' ");
                     break;
-                } else if (line.equalsIgnoreCase(".text")) {
+                } else if (line.trim().equalsIgnoreCase(".data")) {
 
-                    System.out.println(" '.text' encontrado!");
-                    while (!line.equalsIgnoreCase(".data")) {
+                    System.out.println(" '.data' encontrado!");
+                    while (!line.equalsIgnoreCase(".text")) {
                         line = scanner.nextLine();
+                        if(line.trim().equalsIgnoreCase(".text")){break;}
+                        if(line.length() == 0){continue;}//Skip linhas em branco!
                         System.out.println("Linha lida: " + line);
-                        decodeHexLine(line, "text");
+                        mem.addData(line.trim());//Tira espaco em branco do inicio e fim.
                     }
 
                 }
-                if (line.equalsIgnoreCase(".data")) {
+                if (line.equalsIgnoreCase(".text")) {
 
-                    System.out.println(" '.data' encontrado!");
+                    System.out.println(" '.text' encontrado!");
                     while (scanner.hasNextLine()) {
                         line = scanner.nextLine();
+                        if(line.length() == 0){continue;}//Skip linhas em branco!
                         System.out.println(line);
-                        decodeHexLine(line, "data");
+                        decodeHexLine(line);
                     }
                     break;
                 }
@@ -72,16 +76,12 @@ public class LeitorArquivoMips {
         }
     }
 
-    public void decodeHexLine(String line, String isDataOrText) {
+    public void decodeHexLine(String line) {
         StringBuilder strBuilder = new StringBuilder();
         String linha = line.replaceAll(" ", "");// Remove espaco em branco
         for (int i = 0; i < linha.length(); i++) {
             strBuilder.append(tabelaHex.get(linha.charAt(i) + ""));
         }
-        if (isDataOrText.equals("data")) {
-            mem.addData(linha);
-        } else {
-            mem.addText(linha);
-        }
+        mem.addText(line);
     }
 }
