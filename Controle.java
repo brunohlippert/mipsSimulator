@@ -42,6 +42,15 @@ public class Controle {
             valorCarta = valor;
         }
     }
+
+    public instrucoes getOri(){
+        return instrucoes.Ori;
+    }
+
+    public instrucoes getLui(){
+        return instrucoes.Lui;
+    }
+
     public estados estadoAtual;
     public estados proximoEstado;
     public instrucoes instrucaoAtual;
@@ -74,6 +83,30 @@ public class Controle {
         }
     }
 
+    public void addOpcode(String opCode){
+        if(opCode.equals("001001")){
+            instrucaoAtual = instrucoes.Addiu;
+        } else if(opCode.equals("000000")){
+            instrucaoAtual = instrucoes.Tipo_R;
+        } else if(opCode.equals("100011")){
+            instrucaoAtual = instrucoes.Lw;
+        } else if(opCode.equals("101100")){
+            instrucaoAtual = instrucoes.Sw;
+        } else if(opCode.equals("000100")){
+            instrucaoAtual = instrucoes.Beq;
+        } else if(opCode.equals("000010")){
+            instrucaoAtual = instrucoes.Jump;
+        } else if(opCode.equals("001101")){
+            instrucaoAtual = instrucoes.Ori;
+        } else if(opCode.equals("001111")){
+            instrucaoAtual = instrucoes.Lui;
+        } 
+    }
+
+    public instrucoes getInstrucaoAtual(){
+        return instrucaoAtual;
+    }
+
     //
     //  MAQUINA DE ESTADOS
     //
@@ -99,9 +132,7 @@ public class Controle {
         return estadoAtual;
     }
 
-    public void addOpcode(String opCode){
-        instrucaoAtual = instrucoes.valueOf(opCode);
-    }
+   
 
     public boolean entraDecode(){
         PCEscCond = "0";

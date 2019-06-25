@@ -6,6 +6,7 @@ public class App {
         leitor.leArquivo();
 
         mips.avancaClock();
+        mips.avancaClock();
         //mem.printMem();
     }
 }

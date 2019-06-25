@@ -35,10 +35,10 @@ public class ULA {
             }
             return strResult;
         } else if (Controle.getInstance().ULAOp.equals("011")) {// ############# lui ##############
-            result = valueA + valueB;
-        } else if (Controle.getInstance().ULAOp.equals("101")) {// ############# addiu ##############
             String res = entB.substring(15);
             return res + "0000000000000000";
+        } else if (Controle.getInstance().ULAOp.equals("101")) {// ############# addiu ##############
+            result = valueA + valueB;
         } 
         else if(Controle.getInstance().ULAOp.equals("010")){// ############## tipo R: slt, and, sll, srl, addu. ##
             
@@ -76,7 +76,8 @@ public class ULA {
         }
         String res = Integer.toString(result, 2);
         res = res.replace("-", "");
-        for (int i = 0; i < 32 - res.length();i++) {
+        int aux = 32 - res.length();
+        for (int i = 0; i < aux;i++) {
             res = "0"+res;
         }
         return res;
