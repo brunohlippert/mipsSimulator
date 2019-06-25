@@ -95,7 +95,7 @@ public class Controle {
         return false;
     }
 
-    public estado getEstadoAtual(){
+    public estados getEstadoAtual(){
         return estadoAtual;
     }
 

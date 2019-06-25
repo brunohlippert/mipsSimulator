@@ -4,6 +4,6 @@ public class App{
         LeitorArquivoMips leitor = new LeitorArquivoMips("teste.asm");
         Memoria mem = Memoria.getInstance();
         leitor.leArquivo();
-        mem.printMem();
+        //mem.printMem();
     }
 }

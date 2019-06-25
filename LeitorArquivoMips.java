@@ -47,24 +47,19 @@ public class LeitorArquivoMips {
                     System.out.println("ERRO .ASM DEVE COMECAR COM '.data' ");
                     break;
                 } else if (line.trim().equalsIgnoreCase(".data")) {
-
-                    System.out.println(" '.data' encontrado!");
                     while (!line.equalsIgnoreCase(".text")) {
                         line = scanner.nextLine();
                         if(line.trim().equalsIgnoreCase(".text")){break;}
                         if(line.length() == 0){continue;}//Skip linhas em branco!
-                        System.out.println("Linha lida: " + line);
                         mem.addData(line.trim());//Tira espaco em branco do inicio e fim.
                     }
 
                 }
                 if (line.equalsIgnoreCase(".text")) {
 
-                    System.out.println(" '.text' encontrado!");
                     while (scanner.hasNextLine()) {
                         line = scanner.nextLine();
                         if(line.length() == 0){continue;}//Skip linhas em branco!
-                        System.out.println(line);
                         decodeHexLine(line);
                     }
                     break;

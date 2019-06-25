@@ -27,7 +27,7 @@ public class Mips{
     public void avancaClock(){
         this.controle.avancaEstado();
         switch (this.controle.getEstadoAtual()) {
-            case this.controle.instrucoes.BUSCA:
+            case BUSCA:
                 estapaUm();
                 break;
             // case this.controle.instrucoes.BUSCA:
