@@ -17,7 +17,7 @@ public class ULA {
     public String calcula(String entA, String entB, String func) {
         int valueA = new BigInteger(entA, 2).intValue();
         int valueB = new BigInteger(entB, 2).intValue();
-        int result;
+        int result = 0;
         if (Controle.getInstance().ULAOp.equals("000")) {// ######## ADDU/ADDIU//lw/sw #######
             result = valueA + valueB;
         } else if (Controle.getInstance().ULAOp.equals("001")) {// ######## SUB/beq ######

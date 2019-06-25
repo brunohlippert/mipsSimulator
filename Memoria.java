@@ -1,3 +1,4 @@
+
 public class Memoria {
     private String[] memoria;
     // 1 MB
@@ -20,6 +21,21 @@ public class Memoria {
             instance = new Memoria();
         return instance;
     }
+
+    public String getDado(int pos){
+        return this.memoria[pos];
+    }
+
+    public void escreveDadoString(int pos, String dado){
+        if(pos < fimText)
+            throw new IllegalAccessError("Tentando acessar posição de memória restrita");
+        memoria[pos] = dado;
+    }
+
+
+    //
+    //  FUNCOES DE LOAD
+    //
 
     // Adiciona dados na memoria(Dados como 'V1: 123, 444, 555...')
     public void addData(String info) {
@@ -52,7 +68,7 @@ public class Memoria {
     public void printMem(){
         System.out.println("Memoria: ");
         for(int i=0; i<fimText; i++){
-            System.out.println(i+", "+memoria[i]);
+            System.out.println(i+", "+ ((memoria[i] == null) ?"0x00000000" :memoria[i]));
         }
     }
 }

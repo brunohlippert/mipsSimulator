@@ -17,7 +17,7 @@ public class BlocoRegistradores{
     }
 
     public void escreve(int reg, String data){
-        if(Controle.getInstance().EscMem)
+        if(Controle.getInstance().EscReg.equals("1"))
             registradores[reg] = data;
     }
 

@@ -7,7 +7,7 @@ public class LeitorArquivoMips {
 
     private String arqPath;
     private Memoria mem = Memoria.getInstance();
-    final HashMap<String, String> tabelaHex = new HashMap<>() {
+    final HashMap<String, String> tabelaHex = new HashMap<String, String>() {
         {
             put("0", "0000");
             put("1", "0001");
