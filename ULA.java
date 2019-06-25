@@ -18,11 +18,11 @@ public class ULA {
         int valueA = new BigInteger(entA, 2).intValue();
         int valueB = new BigInteger(entB, 2).intValue();
         int result = 0;
-        if (Controle.getInstance().ULAOp.equals("000")) {// ######## ADDU/ADDIU//lw/sw #######
+        if (Controle.getInstance().ULAOp.equals("000")) {// ######## jump/lw/sw #######
             result = valueA + valueB;
-        } else if (Controle.getInstance().ULAOp.equals("001")) {// ######## SUB/beq ######
+        } else if (Controle.getInstance().ULAOp.equals("001")) {// ######## beq ######
             result = valueA - valueB;
-        } else if (Controle.getInstance().ULAOp.equals("010")) {// ######### ORI ########
+        } else if (Controle.getInstance().ULAOp.equals("111")) {// ######### ORI ########
             String strResult = "";
             String[] A_array = entA.split("");
             String[] B_array = entB.split("");
@@ -35,9 +35,13 @@ public class ULA {
             }
             return strResult;
         } else if (Controle.getInstance().ULAOp.equals("011")) {// ############# lui ##############
+            result = valueA + valueB;
+        } else if (Controle.getInstance().ULAOp.equals("101")) {// ############# addiu ##############
             String res = entB.substring(15);
             return res + "0000000000000000";
-        } else {// ############## tipo R: slt, and, sll, srl. ################ ULAOp 001
+        } 
+        else if(Controle.getInstance().ULAOp.equals("010")){// ############## tipo R: slt, and, sll, srl, addu. ##
+            
             if (func.equals("100100")) { // ############ and #############
                 String strResult = "";
                 String[] A_array = entA.split("");
@@ -66,6 +70,8 @@ public class ULA {
                 for (int i = 0; i < valueB; i++) {
                     result /= 2;
                 }
+            }  else if(func.equals("100001")){//########### addu ###############
+                result = valueA + valueB;
             }
         }
         String res = Integer.toString(result, 2);

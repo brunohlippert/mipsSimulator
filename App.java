@@ -4,6 +4,8 @@ public class App{
         LeitorArquivoMips leitor = new LeitorArquivoMips("teste.asm");
         Memoria mem = Memoria.getInstance();
         leitor.leArquivo();
+
+        mips.avancaClock();
         //mem.printMem();
     }
 }

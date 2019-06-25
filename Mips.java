@@ -1,3 +1,5 @@
+import java.math.BigInteger;
+
 public class Mips{
     private Memoria memoria;
     private Controle controle;
@@ -18,6 +20,12 @@ public class Mips{
         this.bcRegistradores = BlocoRegistradores.getInstance();
         this.ula = ULA.getInstance();
         this.PC = memoria.getInitTextPointer();
+
+        this.regInstrucao = "00000000000000000000000000000000";
+        this.regDadosMemoria = "00000000000000000000000000000000";
+        this.regA = "00000000000000000000000000000000";
+        this.regB = "00000000000000000000000000000000";
+        this.regUlaSaida = "00000000000000000000000000000000";
     }
 
     public void carregaArquivo(){
@@ -28,11 +36,11 @@ public class Mips{
         this.controle.avancaEstado();
         switch (this.controle.getEstadoAtual()) {
             case BUSCA:
-                estapaUm();
+                etapaUm();
                 break;
-            // case this.controle.instrucoes.BUSCA:
-            //     estapaUm();
-            //     break;
+            case DECODE:
+                etapaDois();
+                break;
             // case this.controle.instrucoes.BUSCA:
             //     estapaUm();
             //     break;
@@ -45,6 +53,7 @@ public class Mips{
             default:
                 throw new IllegalAccessError(); 
         }
+        printaDados();
     }
     
     /**
@@ -58,10 +67,46 @@ public class Mips{
         7 - Memoria
         8 - regInstrucao
     */
-    public void estapaUm(){
+    public void etapaUm(){
         this.regInstrucao = memoria.getDado(this.PC);
+        String resultPC = this.ula.calcula(Integer.toString(this.PC, 2), Integer.toString(1, 2), "000000");
+        this.regUlaSaida = resultPC;
         if(this.controle.PCEsc.equals("1")){
-            this.PC++;//ULA FAZ PC++ 
+            this.PC = new BigInteger(resultPC, 2).intValue();
         }
+    }
+
+    /**
+    Ativos(Por ordem):
+        1 - Mux entrada 1 ula
+        2 - Mux entrada 2 ula
+        3 - Ula
+        4 - mux entrada em pc
+        5 - PC
+        6 - Mux de endereco da memoria
+        7 - Memoria
+        8 - regInstrucao
+    */
+    public void etapaDois(){
+        this.regA = this.regInstrucao.substring(6, 12);
+        this.regB = this.regInstrucao.substring(13, 19);
+        String resultPC = this.ula.calcula(Integer.toString(this.PC, 2), Integer.toString(1, 2), "000000");
+        this.regUlaSaida = resultPC;
+        if(this.controle.PCEsc.equals("1")){
+            this.PC = new BigInteger(resultPC, 2).intValue();
+        }
+    }
+
+
+    //Temporario
+    public void printaDados(){
+        System.out.println("----- Dados gerais -----");
+        System.out.println("Estado atual: "+this.controle.getEstadoAtual().name());
+        System.out.println("regInstrucao: "+ regInstrucao);
+        System.out.println("regDadosMemoria: "+ regDadosMemoria);
+        System.out.println("RegA: "+regA);
+        System.out.println("RegB: "+regB);
+        System.out.println("RegUlaSaida: "+regUlaSaida);
+        System.out.println("----- FIM -----");
     }
 }

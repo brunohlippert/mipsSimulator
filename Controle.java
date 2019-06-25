@@ -169,7 +169,39 @@ public class Controle {
                 ULAFonteA = "1"; //Em 1
                 EscReg = "0";
                 RegDst = "0";
-                proximoEstado = estados.MEMORIA;
+                proximoEstado = estados.WRITE;
+                return false;
+            case Ori:
+                PCEscCond = "0";
+                PCEsc = "1";
+                louD = "0";
+                LerMem = "1";
+                EscMem = "0";
+                MemParaReg = "0";
+                IREsc = "1";
+                FontePC = "00";
+                ULAOp = "111"; //Em 10
+                ULAFonteB = "00"; //Em 00
+                ULAFonteA = "1"; //Em 1
+                EscReg = "0";
+                RegDst = "0";
+                proximoEstado = estados.WRITE;
+                return false;
+            case Addiu:
+                PCEscCond = "0";
+                PCEsc = "1";
+                louD = "0";
+                LerMem = "1";
+                EscMem = "0";
+                MemParaReg = "0";
+                IREsc = "1";
+                FontePC = "00";
+                ULAOp = "101"; //Em 10
+                ULAFonteB = "00"; //Em 00
+                ULAFonteA = "1"; //Em 1
+                EscReg = "0";
+                RegDst = "0";
+                proximoEstado = estados.WRITE;
                 return false;
             case Lw:
             case Sw:
