@@ -24,4 +24,11 @@ public class BlocoRegistradores{
     public String le(int reg){
         return registradores[reg];
     }
+
+    public void printaRegs(){
+        System.out.println("------------ Registradores -----------------");
+        for(int i = 0; i < NUM_REGS; i++){
+            System.out.println("Registrador "+i+": "+registradores[i]);
+        }
+    }
 }   

@@ -43,14 +43,6 @@ public class Controle {
         }
     }
 
-    public instrucoes getOri(){
-        return instrucoes.Ori;
-    }
-
-    public instrucoes getLui(){
-        return instrucoes.Lui;
-    }
-
     public estados estadoAtual;
     public estados proximoEstado;
     public instrucoes instrucaoAtual;
@@ -100,11 +92,17 @@ public class Controle {
             instrucaoAtual = instrucoes.Ori;
         } else if(opCode.equals("001111")){
             instrucaoAtual = instrucoes.Lui;
-        } 
+        } else{
+            throw new IllegalArgumentException("opCode invalido");
+        }
     }
 
     public instrucoes getInstrucaoAtual(){
         return instrucaoAtual;
+    }
+
+    public estados getEstadoAtual(){
+        return estadoAtual;
     }
 
     //
@@ -127,12 +125,6 @@ public class Controle {
         RegDst = "0";
         return false;
     }
-
-    public estados getEstadoAtual(){
-        return estadoAtual;
-    }
-
-   
 
     public boolean entraDecode(){
         PCEscCond = "0";
@@ -158,13 +150,13 @@ public class Controle {
                 PCEscCond = "0";
                 PCEsc = "1";//Em 1
                 louD = "0";
-                LerMem = "1";
+                LerMem = "0";
                 EscMem = "0";
                 MemParaReg = "0";
-                IREsc = "1";
+                IREsc = "0";
                 FontePC = "10";//Em 10
                 ULAOp = "000";
-                ULAFonteB = "01";
+                ULAFonteB = "00";
                 ULAFonteA = "0";
                 EscReg = "0";
                 RegDst = "0";
@@ -174,10 +166,10 @@ public class Controle {
                 PCEscCond = "1"; //Em 1
                 PCEsc = "0"; //Em 0
                 louD = "0";
-                LerMem = "1";
+                LerMem = "0";
                 EscMem = "0";
                 MemParaReg = "0";
-                IREsc = "1";
+                IREsc = "0";
                 FontePC = "01"; //Em 01
                 ULAOp = "001"; //Em 01
                 ULAFonteB = "00"; //Em 00
@@ -188,35 +180,51 @@ public class Controle {
                 return true;
             case Tipo_R:
                 PCEscCond = "0";
-                PCEsc = "1";
+                PCEsc = "0";
                 louD = "0";
-                LerMem = "1";
+                LerMem = "0";
                 EscMem = "0";
                 MemParaReg = "0";
-                IREsc = "1";
+                IREsc = "0";
                 FontePC = "00";
                 ULAOp = "010"; //Em 10
                 ULAFonteB = "00"; //Em 00
                 ULAFonteA = "1"; //Em 1
                 EscReg = "0";
                 RegDst = "0";
-                proximoEstado = estados.WRITE;
+                proximoEstado = estados.MEMORIA;
                 return false;
             case Ori:
                 PCEscCond = "0";
-                PCEsc = "1";
+                PCEsc = "0";
                 louD = "0";
-                LerMem = "1";
+                LerMem = "0";
                 EscMem = "0";
                 MemParaReg = "0";
-                IREsc = "1";
+                IREsc = "0";
                 FontePC = "00";
                 ULAOp = "111"; //Em 10
                 ULAFonteB = "00"; //Em 00
                 ULAFonteA = "1"; //Em 1
                 EscReg = "0";
                 RegDst = "0";
-                proximoEstado = estados.WRITE;
+                proximoEstado = estados.MEMORIA;
+                return false;
+            case Lui:
+                PCEscCond = "0";
+                PCEsc = "0";
+                louD = "0";
+                LerMem = "0";
+                EscMem = "0";
+                MemParaReg = "0";
+                IREsc = "0";
+                FontePC = "00";
+                ULAOp = "011"; //Em 10
+                ULAFonteB = "10"; //Em 00
+                ULAFonteA = "1"; //Em 1
+                EscReg = "0";
+                RegDst = "0";
+                proximoEstado = estados.MEMORIA;
                 return false;
             case Addiu:
                 PCEscCond = "0";
@@ -232,17 +240,17 @@ public class Controle {
                 ULAFonteA = "1"; //Em 1
                 EscReg = "0";
                 RegDst = "0";
-                proximoEstado = estados.WRITE;
+                proximoEstado = estados.MEMORIA;
                 return false;
             case Lw:
             case Sw:
                 PCEscCond = "0";
-                PCEsc = "1";
+                PCEsc = "0";
                 louD = "0";
-                LerMem = "1";
+                LerMem = "0";
                 EscMem = "0";
                 MemParaReg = "0";
-                IREsc = "1";
+                IREsc = "0";
                 FontePC = "00";
                 ULAOp = "000"; //Em 00
                 ULAFonteB = "10"; //Em 10
@@ -261,31 +269,79 @@ public class Controle {
             //Poderia ser o deafult
             case Tipo_R: 
                 PCEscCond = "0";
-                PCEsc = "1";
+                PCEsc = "0";
                 louD = "0";
-                LerMem = "1";
+                LerMem = "0";
                 EscMem = "0";
                 MemParaReg = "0"; //Em 0
-                IREsc = "1";
+                IREsc = "0";
                 FontePC = "00";
                 ULAOp = "000";
-                ULAFonteB = "01";
+                ULAFonteB = "00";
                 ULAFonteA = "0";
                 EscReg = "1"; //Em 1
                 RegDst = "1"; //Em 1
                 proximoEstado = estados.BUSCA;
                 return true;
-            case Sw:
+            case Ori: 
                 PCEscCond = "0";
-                PCEsc = "1";
-                louD = "1"; //Em 1
-                LerMem = "1";
-                EscMem = "1"; //Em 1
-                MemParaReg = "0";
-                IREsc = "1";
+                PCEsc = "0";
+                louD = "0";
+                LerMem = "0";
+                EscMem = "0";
+                MemParaReg = "0"; //Em 0
+                IREsc = "0";
                 FontePC = "00";
                 ULAOp = "000";
-                ULAFonteB = "01";
+                ULAFonteB = "00";
+                ULAFonteA = "0";
+                EscReg = "1"; //Em 1
+                RegDst = "0";//Em 0
+                proximoEstado = estados.BUSCA;
+                return true;
+            case Lui: 
+                PCEscCond = "0";
+                PCEsc = "0";
+                louD = "0";
+                LerMem = "0";
+                EscMem = "0";
+                MemParaReg = "0"; //Em 0
+                IREsc = "0";
+                FontePC = "00";
+                ULAOp = "000";
+                ULAFonteB = "00";
+                ULAFonteA = "0";
+                EscReg = "1"; //Em 1
+                RegDst = "0";//Em 0
+                proximoEstado = estados.BUSCA;
+                return true;
+            case Addiu: 
+                PCEscCond = "0";
+                PCEsc = "0";
+                louD = "0";
+                LerMem = "0";
+                EscMem = "0";
+                MemParaReg = "0"; //Em 0
+                IREsc = "0";
+                FontePC = "00";
+                ULAOp = "000";
+                ULAFonteB = "00";
+                ULAFonteA = "0";
+                EscReg = "1"; //Em 1
+                RegDst = "0";//Em 0
+                proximoEstado = estados.BUSCA;
+                return true;
+            case Sw:
+                PCEscCond = "0";
+                PCEsc = "0";
+                louD = "1"; //Em 1
+                LerMem = "0";
+                EscMem = "1"; //Em 1
+                MemParaReg = "0";
+                IREsc = "0";
+                FontePC = "00";
+                ULAOp = "000";
+                ULAFonteB = "00";
                 ULAFonteA = "0";
                 EscReg = "0";
                 RegDst = "0";
@@ -293,15 +349,15 @@ public class Controle {
                 return true;
             case Lw:
                 PCEscCond = "0";
-                PCEsc = "1";
+                PCEsc = "0";
                 louD = "1";  //Em 1
                 LerMem = "1"; //Em 1
                 EscMem = "0";
                 MemParaReg = "0";
-                IREsc = "1";
+                IREsc = "0";
                 FontePC = "00";
                 ULAOp = "000";
-                ULAFonteB = "01";
+                ULAFonteB = "00";
                 ULAFonteA = "0";
                 EscReg = "0";
                 RegDst = "0";

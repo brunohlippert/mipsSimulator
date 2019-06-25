@@ -32,28 +32,30 @@ public class Mips{
 
     }
 
-    public void avancaClock(){
+    public boolean avancaClock(){
         this.controle.avancaEstado();
         switch (this.controle.getEstadoAtual()) {
             case BUSCA:
+                if(this.memoria.getFimTextPointer() - 1 < this.PC)
+                    return true; //Fim do programa
                 etapaUm();
                 break;
             case DECODE:
                 etapaDois();
                 break;
-            // case this.controle.instrucoes.BUSCA:
-            //     estapaUm();
-            //     break;
-            // case this.controle.instrucoes.BUSCA:
-            //     estapaUm();
-            //     break;
-            // case this.controle.instrucoes.BUSCA:
-            //     estapaUm();
-            //     break;
+            case EXEC:
+                etapaTres();
+                break;
+            case MEMORIA:
+                etapaQuatro();
+                break;
+            case WRITE:
+                etapaCinco();
+                break;
             default:
                 throw new IllegalAccessError(); 
         }
-        printaDados();
+        return false;
     }
     
     /**
@@ -96,9 +98,133 @@ public class Mips{
         this.regB = this.bcRegistradores.le(new BigInteger(regInstrucao.substring(11, 16), 2).intValue());
         String extensao = regInstrucao.substring(16);
         extensao = extendeSinal(extensao);
-        extensao = extensao.substring(2) + "00";
+        //extensao = extensao.substring(2) + "00"; nao pulamos de  4 em 4 apenas de 1 em 1 na memoria
         String resultUlaPC_Ex = this.ula.calcula(Integer.toString(this.PC, 2), extensao, "000000");
         this.regUlaSaida = resultUlaPC_Ex;
+    }
+
+    public void etapaTres(){
+        if(this.controle.getInstrucaoAtual().name() == "Lw" || 
+        this.controle.getInstrucaoAtual().name() == "Sw"){
+             /**
+                Ativos(Por ordem):
+                1 - extensao de sinal
+                2 - regA
+                3 - 2 mux ula
+                4 - ula
+                5 - ula saida
+             */
+            String extensao = regInstrucao.substring(16);
+            extensao = extendeSinal(extensao);
+            String resultUlaPC_Ex = this.ula.calcula(this.regA, extensao, "000000");
+            this.regUlaSaida = resultUlaPC_Ex;
+        } else if(this.controle.getInstrucaoAtual().name() == "Tipo_R"){
+            /**
+                Ativos(Por ordem):
+                1 - RegA e RegB
+                2 - 2 mux ula
+                3 - ula
+                4 - ula saida
+             */
+            String resultUlaPC_Ex = this.ula.calcula(this.regA, this.regB, this.regInstrucao.substring(26));
+            this.regUlaSaida = resultUlaPC_Ex;
+        } else if(this.controle.getInstrucaoAtual().name() == "Beq"){
+            /**
+                Ativos(Por ordem):
+                1 - regA e regB
+                2 - 2 mux ula
+                3 - Ula
+                4 - Ula saida > mux pc
+                5 - mux pc
+                6 - pc
+             */
+            String resultUlaPC_Ex = this.ula.calcula(this.regA, this.regB, "000000");
+            if(this.ula.getFlagZero()){
+                this.PC = new BigInteger(this.regUlaSaida, 2).intValue();
+            }
+        } else if(this.controle.getInstrucaoAtual().name() == "Jump"){
+            /**
+                Ativos(Por ordem):
+                1 - PC > desloca 2
+                2 - descloca 2
+                3 - mux pc
+                4 - pc
+             */
+            String pcAux = Integer.toString(this.PC, 2);
+            pcAux = pcAux.replace("-", "");
+            int aux = 32 - pcAux.length();
+            for (int i = 0; i < aux;i++) {
+                pcAux = "0"+pcAux;
+            }
+            String endAux = pcAux.substring(0, 6) + this.regInstrucao.substring(6);
+            this.PC = new BigInteger(endAux, 2).intValue();
+        } else if(this.controle.getInstrucaoAtual().name() == "Ori" || 
+        this.controle.getInstrucaoAtual().name() == "Addiu" || 
+        this.controle.getInstrucaoAtual().name() == "Lui"){
+             /**
+                Ativos(Por ordem):
+                1 - RegA e extensao de sinal
+                2 - 2 mux ula
+                3 - ula
+                4 - ula saida
+             */
+            String extensao = regInstrucao.substring(16);
+            extensao = extendeSinal(extensao);
+            String resultUlaPC_Ex = this.ula.calcula(this.regA, extensao, "000000");
+            this.regUlaSaida = resultUlaPC_Ex;
+        } 
+    }
+
+    public void etapaQuatro(){
+        if(this.controle.getInstrucaoAtual().name() == "Lw"){
+            /**
+            Ativos(Por ordem):
+                1 - Ula saida
+                2 - mux memoria
+                3 - memoria
+                4 - reg de dados
+            */
+            this.regDadosMemoria = this.memoria.getDado(new BigInteger(this.regUlaSaida, 2).intValue());
+        } else if(this.controle.getInstrucaoAtual().name() == "Sw"){
+            /**
+            Ativos(Por ordem):
+                1 - Ula saida
+                2 - B
+                3 - mux memoria
+                4 - memoria
+            */
+            this.memoria.escreveDadoString(new BigInteger(this.regUlaSaida, 2).intValue(), this.regB);
+        } else if(this.controle.getInstrucaoAtual().name() == "Tipo_R"){
+            /**
+            Ativos(Por ordem):
+                1 - Ula saida
+                2 - reg instrucao
+                3 - 2 mux bc regs
+                4 - bc regs
+            */
+            this.bcRegistradores.escreve(new BigInteger(this.regInstrucao.substring(16, 21), 2).intValue(), this.regUlaSaida);
+        } else if(this.controle.getInstrucaoAtual().name() == "Ori" || 
+        this.controle.getInstrucaoAtual().name() == "Addiu" ||
+        this.controle.getInstrucaoAtual().name() == "Lui"){
+            /**
+            Ativos(Por ordem):
+                1 - Ula saida
+                2 - reg instrucao
+                3 - 2 mux bc regs
+                4 - bc regs
+            */
+            this.bcRegistradores.escreve(new BigInteger(this.regInstrucao.substring(11, 16), 2).intValue(), this.regUlaSaida);
+        }
+    }
+
+    /**
+    Ativos(Por ordem):
+        1 - reg Dados memoria e reg IR
+        2 - 2 mux bc regs
+        3 - bc regs
+    */
+    public void etapaCinco(){
+        this.bcRegistradores.escreve(new BigInteger(regInstrucao.substring(11, 16), 2).intValue(), this.regDadosMemoria);
     }
 
     //Temporario
@@ -111,12 +237,13 @@ public class Mips{
         System.out.println("RegA: "+regA);
         System.out.println("RegB: "+regB);
         System.out.println("RegUlaSaida: "+regUlaSaida);
+        this.bcRegistradores.printaRegs();
         System.out.println("----- FIM -----");
     }
 
     public String extendeSinal(String val){
-        if(this.controle.getInstrucaoAtual() == this.controle.getOri() ||
-         this.controle.getInstrucaoAtual() == this.controle.getLui()){
+        if(this.controle.getInstrucaoAtual().name() == "Ori" ||
+        this.controle.getInstrucaoAtual().name() == "Lui"){
             //Logico
             return "0000000000000000"+val;
         } else {

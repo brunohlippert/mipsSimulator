@@ -4,7 +4,7 @@ public class ULA {
     private static ULA instance;
 
     private ULA() {
-
+        this.zero = false;
     }
 
     public static ULA getInstance() {
@@ -13,8 +13,15 @@ public class ULA {
         return instance;
     }
 
+    private boolean zero;
+
+    public boolean getFlagZero(){
+        return zero;
+    }
+
     // entB pode ser shamt
     public String calcula(String entA, String entB, String func) {
+        this.zero = false;
         int valueA = new BigInteger(entA, 2).intValue();
         int valueB = new BigInteger(entB, 2).intValue();
         int result = 0;
@@ -22,6 +29,9 @@ public class ULA {
             result = valueA + valueB;
         } else if (Controle.getInstance().ULAOp.equals("001")) {// ######## beq ######
             result = valueA - valueB;
+            if(result == 0){
+                this.zero = true;
+            }
         } else if (Controle.getInstance().ULAOp.equals("111")) {// ######### ORI ########
             String strResult = "";
             String[] A_array = entA.split("");
@@ -72,6 +82,7 @@ public class ULA {
                 }
             }  else if(func.equals("100001")){//########### addu ###############
                 result = valueA + valueB;
+                System.out.println("------------------------------ADDU");
             }
         }
         String res = Integer.toString(result, 2);

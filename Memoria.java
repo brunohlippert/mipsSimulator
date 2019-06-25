@@ -38,7 +38,7 @@ public class Memoria {
 
     // Adiciona dados na memoria(Dados como 'V1: 123, 444, 555...')
     public void addData(String info) {
-        this.memoria[fimText++] = info;
+        this.memoria[fimData++] = info;
     }
 
     // Adiciona 'text' na memoria(CODIGO!!!)
@@ -61,7 +61,7 @@ public class Memoria {
     }
 
     public int getFimDataPoiner() {
-        return this.fimText;
+        return this.fimData;
     }
 
     public void printMem() {

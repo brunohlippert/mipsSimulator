@@ -4,9 +4,12 @@ public class App {
         LeitorArquivoMips leitor = new LeitorArquivoMips("teste.asm");
         Memoria mem = Memoria.getInstance();
         leitor.leArquivo();
+        boolean result = false;
+        do{
+            result = mips.avancaClock();
+            
+        }while(result == false);
 
-        mips.avancaClock();
-        mips.avancaClock();
-        //mem.printMem();
+        mips.printaDados();
     }
 }
