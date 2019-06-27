@@ -45,7 +45,7 @@ public class ULA {
             }
             return strResult;
         } else if (Controle.getInstance().ULAOp.equals("011")) {// ############# lui ##############
-            String res = entB.substring(15);
+            String res = entB.substring(16);
             return res + "0000000000000000";
         } else if (Controle.getInstance().ULAOp.equals("101")) {// ############# addiu ##############
             result = valueA + valueB;
@@ -82,7 +82,6 @@ public class ULA {
                 }
             }  else if(func.equals("100001")){//########### addu ###############
                 result = valueA + valueB;
-                System.out.println("------------------------------ADDU");
             }
         }
         String res = Integer.toString(result, 2);

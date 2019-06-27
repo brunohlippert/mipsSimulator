@@ -25,6 +25,12 @@ public class LeitorArquivoMips {
             put("D", "1101");// 13
             put("E", "1110");// 14
             put("F", "1111");// 15
+            put("a", "1010");// 10
+            put("b", "1011");// 11
+            put("c", "1100");// 12
+            put("d", "1101");// 13
+            put("e", "1110");// 14
+            put("f", "1111");// 15
         }
     };
 
@@ -57,7 +63,8 @@ public class LeitorArquivoMips {
                         if (line.length() == 0) {
                             continue;
                         } // Skip linhas em branco!
-                        decodeHexLine(line);
+                        String result = decodeHexLine(line);
+                        mem.addText(result);
                     }
 
                 }
@@ -68,7 +75,14 @@ public class LeitorArquivoMips {
                         if (line.length() == 0) {
                             continue;
                         } // Skip linhas em branco!
-                        mem.addData(line.trim());// Tira espaco em branco do inicio e fim.
+                        //Adiciona somente os valores sem label, e se for array, adiciona
+                        //os valores sequencialmente na memoria
+                        String txtDados = line.split(".word")[1];//so os dados
+                        String[] dadosWord = txtDados.trim().split(" ");
+                        for (String dato : dadosWord) {
+                            String result = decodeHexLine(dato);
+                            mem.addData(result);
+                        }
                     }
                     break;
                 }
@@ -79,13 +93,13 @@ public class LeitorArquivoMips {
         }
     }
 
-    public void decodeHexLine(String line) {
+    public String decodeHexLine(String line) {
         line = line.substring(2);
         StringBuilder strBuilder = new StringBuilder();
         String linha = line.replaceAll(" ", "");// Remove espaco em branco
         for (int i = 0; i < linha.length(); i++) {
             strBuilder.append(tabelaHex.get(linha.charAt(i) + ""));
         }
-        mem.addText(strBuilder.toString());
+        return strBuilder.toString();
     }
 }

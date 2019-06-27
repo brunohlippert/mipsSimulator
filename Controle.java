@@ -30,7 +30,7 @@ public class Controle {
     public enum instrucoes {
         Tipo_R("000000"),
         Lw("100011"),
-        Sw("101100"),
+        Sw("101011"),
         Beq("000100"),
         Jump("000010"),
         Ori("001101"),
@@ -82,7 +82,7 @@ public class Controle {
             instrucaoAtual = instrucoes.Tipo_R;
         } else if(opCode.equals("100011")){
             instrucaoAtual = instrucoes.Lw;
-        } else if(opCode.equals("101100")){
+        } else if(opCode.equals("101011")){
             instrucaoAtual = instrucoes.Sw;
         } else if(opCode.equals("000100")){
             instrucaoAtual = instrucoes.Beq;

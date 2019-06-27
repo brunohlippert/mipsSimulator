@@ -5,11 +5,13 @@ public class App {
         Memoria mem = Memoria.getInstance();
         leitor.leArquivo();
         boolean result = false;
+        //mem.printMem();
         do{
             result = mips.avancaClock();
             
         }while(result == false);
 
         mips.printaDados();
+        mem.printMem();
     }
 }

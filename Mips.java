@@ -1,4 +1,5 @@
 import java.math.BigInteger;
+import java.util.HashMap;
 
 public class Mips{
     private Memoria memoria;
@@ -13,6 +14,27 @@ public class Mips{
     private String regB;
     private String regUlaSaida;
     private int PC;
+
+    final HashMap<String, String> tabelaHex = new HashMap<String, String>() {
+        {
+            put("0000", "0");
+            put("0001", "1");
+            put("0010", "2");
+            put("0011", "3");
+            put("0100", "4");
+            put("0101", "5");
+            put("0110", "6");
+            put("0111", "7");
+            put("1000", "8");
+            put("1001", "9");
+            put("1010", "A");// 10
+            put("1011", "B");// 11
+            put("1100", "C");// 12
+            put("1101", "D");// 13
+            put("1110", "E");// 14
+            put("1111", "F");// 15
+        }
+    };
 
     public Mips(){
         this.memoria = Memoria.getInstance();
@@ -70,7 +92,7 @@ public class Mips{
         8 - regInstrucao
     */
     public void etapaUm(){
-        this.regInstrucao = memoria.getDado(this.PC);
+        this.regInstrucao = memoria.getInstrucao(this.PC);
         String resultPC = this.ula.calcula(Integer.toString(this.PC, 2), Integer.toString(1, 2), "000000");
         this.regUlaSaida = resultPC;
         if(this.controle.PCEsc.equals("1")){
@@ -184,7 +206,7 @@ public class Mips{
                 3 - memoria
                 4 - reg de dados
             */
-            this.regDadosMemoria = this.memoria.getDado(new BigInteger(this.regUlaSaida, 2).intValue());
+            this.regDadosMemoria = this.memoria.getDado(new BigInteger(this.regUlaSaida.substring(16), 2).intValue());
         } else if(this.controle.getInstrucaoAtual().name() == "Sw"){
             /**
             Ativos(Por ordem):
@@ -193,7 +215,7 @@ public class Mips{
                 3 - mux memoria
                 4 - memoria
             */
-            this.memoria.escreveDadoString(new BigInteger(this.regUlaSaida, 2).intValue(), this.regB);
+            this.memoria.escreveDadoString(new BigInteger(this.regUlaSaida.substring(16), 2).intValue(), this.regB);
         } else if(this.controle.getInstrucaoAtual().name() == "Tipo_R"){
             /**
             Ativos(Por ordem):
@@ -232,14 +254,21 @@ public class Mips{
         System.out.println("----- Dados gerais -----");
         System.out.println("Estado atual: "+this.controle.getEstadoAtual().name());
         System.out.println("PC: "+ PC);
-        System.out.println("regInstrucao: "+ regInstrucao);
-        System.out.println("regDadosMemoria: "+ regDadosMemoria);
-        System.out.println("RegA: "+regA);
-        System.out.println("RegB: "+regB);
-        System.out.println("RegUlaSaida: "+regUlaSaida);
+        System.out.println("regInstrucao: "+ toHex(regInstrucao));
+        System.out.println("regDadosMemoria: "+ toHex(regDadosMemoria));
+        System.out.println("RegA: "+toHex(regA));
+        System.out.println("RegB: "+toHex(regB));
+        System.out.println("RegUlaSaida: "+toHex(regUlaSaida));
         this.bcRegistradores.printaRegs();
         System.out.println("----- FIM -----");
     }
+
+    public String toHex(String binario32){
+        return "0x" + tabelaHex.get(binario32.substring(0, 4)) + tabelaHex.get(binario32.substring(4, 8)) +
+        tabelaHex.get(binario32.substring(8, 12)) + tabelaHex.get(binario32.substring(12, 16)) + tabelaHex.get(binario32.substring(16, 20)) +
+        tabelaHex.get(binario32.substring(20, 24)) + tabelaHex.get(binario32.substring(24, 28)) + tabelaHex.get(binario32.substring(28, 32));
+    }
+    
 
     public String extendeSinal(String val){
         if(this.controle.getInstrucaoAtual().name() == "Ori" ||
