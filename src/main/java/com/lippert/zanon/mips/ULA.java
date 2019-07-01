@@ -3,6 +3,7 @@ import java.math.BigInteger;
 
 public class ULA {
     private static ULA instance;
+    private String instrucaoR;
 
     private ULA() {
         this.zero = false;
@@ -54,6 +55,7 @@ public class ULA {
         else if(Controle.getInstance().ULAOp.equals("010")){// ############## tipo R: slt, and, sll, srl, addu. ##
             
             if (func.equals("100100")) { // ############ and #############
+                instrucaoR = "And";
                 String strResult = "";
                 String[] A_array = entA.split("");
                 String[] B_array = entB.split("");
@@ -66,22 +68,26 @@ public class ULA {
                 }
                 return strResult;
             } else if (func.equals("101010")) {// ############## slt ##############
+                instrucaoR = "slt";
                 if (valueA < valueB) {
                     return "00000000000000000000000000000001";
                 } else {
                     return "00000000000000000000000000000000";
                 }
             } else if (func.equals("000000")) {//########### sll ###############
+                instrucaoR = "sll";
                 result = valueA;
                 for (int i = 0; i < valueB; i++) {
                     result *= 2;
                 }
-            } else if(func.equals("000010")){//########### slr ###############
+            } else if(func.equals("000010")){//########### srl ###############
+                instrucaoR = "srl";
                 result = valueA;
                 for (int i = 0; i < valueB; i++) {
                     result /= 2;
                 }
             }  else if(func.equals("100001")){//########### addu ###############
+                instrucaoR = "addu";
                 result = valueA + valueB;
             }
         }
@@ -92,5 +98,9 @@ public class ULA {
             res = "0"+res;
         }
         return res;
+    }
+
+    public String getTipor(){
+        return this.instrucaoR;
     }
 }

@@ -64,12 +64,24 @@ public class Memoria {
     }
 
     public String[] getDadosHex(){
-        String[] dados = new String[MEMORY_SIZE - initData];
-        for (int i = 0; i < MEMORY_SIZE - initData; i++) {
-            dados[i] = toHex(getDado(i + initData));
+        String[] dados = new String[MEMORY_SIZE];
+        int j = 0;
+        for (int i = initData; i < MEMORY_SIZE; i++, j++) {
+            dados[j] = toHex(getDadoAux(i));
+        }
+
+        for(; j< MEMORY_SIZE; j++){
+            dados[j] = "0x00000000";
         }
 
         return dados;
+    }
+
+    public String getDadoAux(int pos) {
+        if(this.memoria[pos] == null){
+            return "00000000000000000000000000000000";
+        }
+        return this.memoria[pos];
     }
 
     //

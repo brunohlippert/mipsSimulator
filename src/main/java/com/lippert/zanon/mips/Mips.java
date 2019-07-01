@@ -2,6 +2,8 @@ package com.lippert.zanon.mips;
 import java.math.BigInteger;
 import java.util.HashMap;
 
+import com.lippert.zanon.mips.Controle.estados;
+
 public class Mips{
     private Memoria memoria;
     private Controle controle;
@@ -56,11 +58,11 @@ public class Mips{
     }
 
     public boolean avancaClock(){
+        if(this.memoria.getFimTextPointer() - 1 < this.PC && this.controle.getProximoEstado() == estados.BUSCA)
+            return true;
         this.controle.avancaEstado();
         switch (this.controle.getEstadoAtual()) {
             case BUSCA:
-                if(this.memoria.getFimTextPointer() - 1 < this.PC)
-                    return true; //Fim do programa
                 etapaUm();
                 break;
             case DECODE:
@@ -293,4 +295,33 @@ public class Mips{
             return val;
         }
     }
+
+    public String getRegInstrucao() {
+        return regInstrucao;
+    }
+
+    public String getRegDadosMemoria() {
+        return regDadosMemoria;
+    }
+
+
+    public String getRegA() {
+        return regA;
+    }
+
+
+    public String getRegB() {
+        return regB;
+    }
+
+    public String getRegUlaSaida() {
+        return regUlaSaida;
+    }
+
+    public int getPC() {
+        return PC;
+    }
+
+
+    
 }

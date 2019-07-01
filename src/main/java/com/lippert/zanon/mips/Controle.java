@@ -1,7 +1,6 @@
 package com.lippert.zanon.mips;
 public class Controle {
     private static Controle instance;
-
     public String PCEscCond;
     public String PCEsc;
     public String louD;
@@ -15,6 +14,7 @@ public class Controle {
     public String ULAFonteA; // MUX
     public String EscReg;
     public String RegDst;
+    public String img;
 
     public enum estados {
         BUSCA("BUSCA"),
@@ -51,6 +51,11 @@ public class Controle {
     private Controle() {
         desativaTodos();
         proximoEstado = estados.BUSCA;
+        img = "mipsBase.png";
+    }
+
+    public estados getProximoEstado(){
+        return this.proximoEstado;
     }
 
     public boolean avancaEstado(){
@@ -124,6 +129,7 @@ public class Controle {
         ULAFonteA = "0"; //Em 0
         EscReg = "0";
         RegDst = "0";
+        img = "busca.png";
         return false;
     }
 
@@ -142,6 +148,12 @@ public class Controle {
         EscReg = "0";
         RegDst = "0";
         proximoEstado = estados.EXEC;
+        if(instrucaoAtual == instrucoes.Tipo_R || instrucaoAtual == instrucoes.Beq ||
+         instrucaoAtual == instrucoes.Jump){
+            img = "decodeTipor.png";
+        } else {
+            img = "decodeTipoi.png";
+        }
         return false;
     }
 
@@ -162,6 +174,7 @@ public class Controle {
                 EscReg = "0";
                 RegDst = "0";
                 proximoEstado = estados.BUSCA;
+                img = "execjump.png";
                 return true;
             case Beq:
                 PCEscCond = "1"; //Em 1
@@ -177,6 +190,7 @@ public class Controle {
                 ULAFonteA = "1"; //Em 1
                 EscReg = "0";
                 RegDst = "0";
+                img = "execbeq.png";
                 proximoEstado = estados.BUSCA;
                 return true;
             case Tipo_R:
@@ -193,6 +207,7 @@ public class Controle {
                 ULAFonteA = "1"; //Em 1
                 EscReg = "0";
                 RegDst = "0";
+                img = "exectipor.png";
                 proximoEstado = estados.MEMORIA;
                 return false;
             case Ori:
@@ -209,6 +224,7 @@ public class Controle {
                 ULAFonteA = "1"; //Em 1
                 EscReg = "0";
                 RegDst = "0";
+                img = "exectipoi.png";
                 proximoEstado = estados.MEMORIA;
                 return false;
             case Lui:
@@ -225,6 +241,7 @@ public class Controle {
                 ULAFonteA = "1"; //Em 1
                 EscReg = "0";
                 RegDst = "0";
+                img = "exectipoi.png";
                 proximoEstado = estados.MEMORIA;
                 return false;
             case Addiu:
@@ -241,6 +258,7 @@ public class Controle {
                 ULAFonteA = "1"; //Em 1
                 EscReg = "0";
                 RegDst = "0";
+                img = "exectipoi.png";
                 proximoEstado = estados.MEMORIA;
                 return false;
             case Lw:
@@ -258,6 +276,7 @@ public class Controle {
                 ULAFonteA = "1"; //Em 1
                 EscReg = "0";
                 RegDst = "0";
+                img = "execlwsw.png";
                 proximoEstado  = estados.MEMORIA;
                 return false;
             default:
@@ -282,6 +301,7 @@ public class Controle {
                 ULAFonteA = "0";
                 EscReg = "1"; //Em 1
                 RegDst = "1"; //Em 1
+                img = "memoriatipor.png";
                 proximoEstado = estados.BUSCA;
                 return true;
             case Ori: 
@@ -298,6 +318,7 @@ public class Controle {
                 ULAFonteA = "0";
                 EscReg = "1"; //Em 1
                 RegDst = "0";//Em 0
+                img = "memoriatipoi.png";
                 proximoEstado = estados.BUSCA;
                 return true;
             case Lui: 
@@ -314,6 +335,7 @@ public class Controle {
                 ULAFonteA = "0";
                 EscReg = "1"; //Em 1
                 RegDst = "0";//Em 0
+                img = "memoriatipoi.png";
                 proximoEstado = estados.BUSCA;
                 return true;
             case Addiu: 
@@ -330,6 +352,7 @@ public class Controle {
                 ULAFonteA = "0";
                 EscReg = "1"; //Em 1
                 RegDst = "0";//Em 0
+                img = "memoriatipoi.png";
                 proximoEstado = estados.BUSCA;
                 return true;
             case Sw:
@@ -346,6 +369,7 @@ public class Controle {
                 ULAFonteA = "0";
                 EscReg = "0";
                 RegDst = "0";
+                img = "memoriasw.png";
                 proximoEstado = estados.BUSCA;
                 return true;
             case Lw:
@@ -362,6 +386,7 @@ public class Controle {
                 ULAFonteA = "0";
                 EscReg = "0";
                 RegDst = "0";
+                img = "memorialw.png";
                 proximoEstado = estados.WRITE;
                 return false;
             default:
@@ -383,6 +408,7 @@ public class Controle {
         ULAFonteA = "0";
         EscReg = "1"; //Em 1
         RegDst = "0"; //Em 0]
+        img = "writeback.png";
         proximoEstado = estados.BUSCA;
         return true;
     }

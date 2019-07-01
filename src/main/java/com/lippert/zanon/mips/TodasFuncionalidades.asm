@@ -36,10 +36,10 @@
 0x24180001#adiciona um no reg para fazer a mascara e descobrir se eh impar
 0x030bc024#se for impar o numero fica em 1 (and)
 0xae580000#guarda se eh impar (sw)
-0x000bc040#multiplica por 2(sll)
-0xae980000#guarda
-0x000bc042#divide por 2(srl)
+0x000bc040#multiplica sll
 0xae780000#guarda
+0x000bc042#divide srl
+0xae980000#guarda
 .data
 A: .word 0x00000008#enesimo numero que queremos achar	
 resultado: .word 0x00000000#qual eh o enesimo numero da sequencia de fibbonaci

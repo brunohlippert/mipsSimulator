@@ -25,9 +25,9 @@ addiu $t8, $zero, 1 #adiciona um no reg para fazer a mascara e descobrir se eh i
 and $t8, $t8, $t3 #se for impar o numero fica em 1
 sw $t8, 0($s2) #guarda se eh impar
 sll $t8, $t3, 1 #multiplica por 2
-sw $t8, 0($s4) #guarda
-srl $t8, $t3, 1 #divide por 2
 sw $t8, 0($s3) #guarda
+srl $t8, $t3, 1 #divide por 2
+sw $t8, 0($s4) #guarda
 .data
 A: .word 8			
 resultado: .word 000
